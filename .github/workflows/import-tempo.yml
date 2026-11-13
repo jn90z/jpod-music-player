@@ -1,0 +1,18 @@
+name: Replace main with Tempo upstream source
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Import upstream Tempo into main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git clone --depth 1 https://github.com/CappielloAntonio/tempo.git tempo-upstream
+          cd tempo-upstream
+          git remote add jpod "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force jpod HEAD:refs/heads/main
